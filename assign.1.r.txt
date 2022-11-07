@@ -1,0 +1,153 @@
+#SUBJECT 3
+library(MASS)
+library(dplyr)
+data("Cars93")
+head(Cars93)
+
+car93NumericalColumns<-select_if(Cars93, is.numeric)
+
+finalData <-car93NumericalColumns[complete.cases(car93NumericalColumns), ]
+
+
+if (any(is.na(finalData[,"Luggage.room"]))) {
+  sprintf("Luggage.room has NA values")
+} else
+  sprintf("Luggage.room is ok! ")
+
+
+covCar <- cov(finalData)
+
+results <- princomp(covCar, cor=FALSE, score=TRUE)
+results$rotation
+attributes(results)
+results$scores
+summary(results)
+results$loadings
+pc<-results$loadings
+eigen(pc)
+#display principal components
+plot(results)
+biplot(results)
+#SUBJECT 4
+#4.1.
+#4.a.
+euclidean <- function(x, y) sqrt(sum((x - y)^2))          
+x <- c(1,2,3,4,5,6) 
+y <- c(1,2,3,4,5,6)
+euclidean(x,y)
+
+#The result is 0 that means we have similar vectors.
+
+#4.b.
+euclidean <- function(x, y) sqrt(sum((x - y)^2))  
+x <- c(-0.5, 1, 7.3, 7, 9.4, -8.2, 9, -6, -6.3)
+y <- c(0.5, -1, -7.3, -7, -9.4, 8.2, -9, 6, 6.3)
+euclidean(x,y)
+
+#The result is 40.78382, we have big distance between the two vectors.
+
+#4.c.
+euclidean <- function(x, y) sqrt(sum((x - y)^2))
+x <- c(-0.5, 1, 7.3, 7, 9.4, -8.2)
+y <- c(1.25, 9.02, -7.3, -7, 5, 1.3)
+euclidean(x,y)
+
+#The result is 24.21059, we have big distance between the two vectors.
+
+#4.d.
+euclidean <- function(x, y) sqrt(sum((x - y)^2))  
+x <- c(0, 0, 0.2)
+y <- c(0.2, 0.2, 0)
+euclidean(x,y)
+
+#The result is 0.3464102, it is close to zero so we have distance but not so big.
+#4.2.A
+library(lsa)
+
+vectorminutes <- c(25000,42000,55000,27000,58000)
+vectorsms <- c(14,17,22,13,21)
+vectorinternet <- c(7,9,5,11,13)
+last <- cbind(vectorminutes,vectorsms,vectorinternet)
+
+euclidean <- function(x, y) sqrt(sum((x - y)^2)) 
+
+distance <-dist(last, method="euclidean")
+
+print(distance)
+
+#The command gives us the above table, in the last row of the table we see the distance that the 5th user has with the rest. The smallest distance has the profile of user 3. This meansthat of all the users, user 3 is more similar to user 5.
+#SUBJECT 5
+library(text2vec)
+library(lsa)
+cosine <- function(x,y) sum(x*y) / (sqrt(sum(x*x)) * sqrt(sum(y*y)))
+#5.a
+x <- c(9.32, -8.3, 0.2)
+y <-c(-5.3, 8.2, 7)
+print(cosine(x,y))
+cos <-print(cosine(x,y))
+distance= 1-cos
+print(distance)
+#The CosineSimilarity is -0.7739558 and the distance is 1.7739558.
+#5.b.
+x <- c(6.5, 1.3, 0.3, 16, 2.4, -5.2, 2, -6, -6.3)
+y <- c(0.5, -1, -7.3, -7, -9.4, 8.2, -9, 6, 6.3)
+print(cosine(x,y))
+cos <-print(cosine(x,y))
+distance= 1-cos
+print(distance)
+#The CosineSimilarity is -0.6546319 and the distance is 1.6546319.
+#5.c.
+x <- c(-0.5, 1, 7.3, 7, 9.4, -8.2)
+y <- c(1.25, 9.02, -7.3, -7, 15, 12.3)
+print(cosine(x,y))
+cos <-print(cosine(x,y))
+distance= 1-cos
+print(distance)
+#The CosineSimilarity is -0.140921 and the distance is 1.140921.
+#5.d.
+x <- c(2, 8, 5.2)
+y <- c(2, 8, 5.2)
+print(cosine(x,y))
+cos <-print(cosine(x,y))
+distance= 1-cos
+print(distance)
+#The Cosine Similarity is 1 and the distance is 0 , we have similar vectors. 
+#SUBJECT 6
+#6a
+x <- c("Green","Potato","Ford") 
+y <- c("Tyrian purple","Pasta","Opel")
+jaccard <- function(x, y) {
+  intersection = length(intersect(x, y))
+  union = length(x) + length(y) - intersection
+  return (intersection/union)
+}
+xy <- jaccard(x, y)
+Nominaldistance <- 1-xy
+print(Nominaldistance)
+#Nominal distance here is  1(max) since they have nothing in common.
+
+#6b
+x <-c("Eagle", "Ronaldo", "Real madrid", "Prussian blue", "Michael Bay")
+y <-c("Eagle", "Ronaldo", "Real madrid", "Prussian blue", "Michael Bay")
+jaccard <- function(x, y) {
+  intersection = length(intersect(x, y))
+  union = length(x) + length(y) - intersection
+  return (intersection/union)
+}
+xy <- jaccard(x, y)
+Nominaldistance <- 1-xy
+print(Nominaldistance)
+#Nominal distance here is  0 (min) since they are exactly the same.
+
+#6c
+x <-c("Werner Herzog", "Aquirre, the wrath of God", "Audi", "Spanish red")
+y <-c("Martin Scorsese","Taxi driver" , "Toyota", "Spanish red")
+jaccard <- function(x, y) {
+  intersection = length(intersect(x, y))
+  union = length(x) + length(y) - intersection
+  return (intersection/union)
+}
+xy <- jaccard(x, y)
+Nominaldistance <- 1-xy
+print(Nominaldistance)
+#Nominal distance here is  0.8571429 they only have one content in common.

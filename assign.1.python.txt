@@ -1,0 +1,199 @@
+# SUBJECT 3
+import pandas as pd
+import sklearn
+## import data set from ecxel
+df = pd.read_csv("C:/Users/magvo/Downloads/winequality/white.csv"
+,sep=";")
+print(df)
+from sklearn.preprocessing import StandardScaler
+features= ['fixed acidity',"volatile acidity","citric acid",
+"residual sugar","chlorides","free sulfur dioxide",
+"total sulfur dioxide","density","pH","sulphates","alcohol",
+"quality"]
+x = df.loc[:, features].values
+x = StandardScaler().fit_transform(x)
+##pca
+from sklearn.decomposition import PCA
+pca = PCA(n_components=4)##four new axis
+principalComponents = pca.fit_transform(x)
+principalDf = pd.DataFrame(data=principalComponents, columns = 
+['principal component 1', 'principal component 2',
+'principal component 3',
+'principal component 4'])
+print (principalDf)##new variables 
+
+## from this scores we can compute the percentage of variance by adding one more component
+eigenvalues = pca.explained_variance_ 
+print(eigenvalues) ## eigenvalues
+print("eigen vectors:")
+print(pca.components_) ## eigenvectors
+                 
+#SUBJECT 4
+#4.1
+import numpy as np
+##4.a.python
+p1=np.array([1,2,3,4,5,6] )
+p2=np.array([1,2,3,4,5,6])
+d=np.linalg.norm(p2-p1)
+print(d)
+#The result is 0 that means we have similar vectors.
+
+##4.b. python
+p1=np.array([-0.5, 1, 7.3, 7, 9.4, -8.2, 9, -6, -6.3] )
+p2=np.array([0.5, -1, -7.3, -7, -9.4, 8.2, -9, 6, 6.3])
+d=np.linalg.norm(p2-p1)
+print(d)
+#The result is 40.78382, we have big distance between the two vectors.
+
+##4.c.python
+p1=np.array([-0.5, 1, 7.3, 7, 9.4, -8.2] )
+p2=np.array([1.25, 9.02, -7.3, -7, 5, 1.3])
+d=np.linalg.norm(p2-p1)
+print(d)
+#The result is 24.21059, we have big distance between the two vectors.
+
+##4.d.python
+p1=np.array([0, 0, 0.2] )
+p2=np.array([0.2, 0.2, 0])
+d=np.linalg.norm(p2-p1)
+print(d)
+#The result is 0.3464102, it is close to zero so we have distance but not so big.
+#4.2
+import pandas as pd
+minutes=(25000,42000,55000,27000,58000)##vector for minutes
+sms=(14,17,22,13,21)##vector for sms
+mb=(7,9,5,11,13)##vector for mbs
+
+comp=10000000000000000000##we set comp as a big number to compare 
+the euclidean distances and keep the smaller
+##loop that computes for every individual the dist from 
+the 3rd
+for i in range(5):
+ eudist=((minutes[i]-minutes[4])**2+(sms[i]-sms[4])**2
+ +(mb[i]-mb[4])**2)**0.5
+ print(eudist)
+ if eudist<comp and eudist!=0:##keep the distance if it 
+ is smaller than the previous one and not zero to exclude the third 
+ individual comparation with him self
+        comp=eudist
+        pos=i+1
+
+print(comp)
+print(pos)##the position of the smallest euclidean distance
+
+##SUBJECT 5
+ 
+#5.a. define two lists or array
+x = np.array([9.32, -8.3, 0.2 ])
+y = np.array([-5.3, 8.2, 7])
+ 
+print("x:", x)
+print("y:", y)
+ 
+# compute cosine similarity
+cosine = np.dot(x,y)/(norm(x)*norm(y))
+print("Cosine Similarity:", cosine)
+
+#compute distance
+distance=(1-cosine)
+print("Distance:",distance)
+#The CosineSimilarity is -0.7739558 and the distance is 1.7739558.
+
+#5.b. define two lists or array
+x = np.array([(6.5, 1.3, 0.3, 16, 2.4, -5.2, 2, -6, -6.3) ])
+y = np.array([0.5, -1, -7.3, -7, -9.4, 8.2, -9, 6, 6.3])
+
+print("x:", x)
+print("y:", y)
+
+# compute cosine similarity
+cosine = np.dot(x,y)/(norm(x)*norm(y))
+print("Cosine Similarity:", cosine)
+
+#compute distance
+distance=(1-cosine)
+print("Distance:",distance)
+#The CosineSimilarity is -0.6546319 and the distance is 1.6546319.
+
+#5.c. define two lists or array
+x = np.array([-0.5, 1, 7.3, 7, 9.4, -8.2 ])
+y = np.array([1.25, 9.02, -7.3, -7, 15, 12.3])
+ 
+print("x:", x)
+print("y:", y)
+ 
+# compute cosine similarity
+cosine = np.dot(x,y)/(norm(x)*norm(y))
+print("Cosine Similarity:", cosine)
+
+#compute distance
+distance=(1-cosine)
+print("Distance:",distance)
+#The CosineSimilarity is -0.140921 and the distance is 1.140921.
+
+#5.d. define two lists or array
+x = np.array([2, 8, 5.2 ])
+y = np.array([2, 8, 5.2])
+ 
+print("x:", x)
+print("y:", y)
+ 
+# compute cosine similarity
+cosine = np.dot(x,y)/(norm(x)*norm(y))
+print("Cosine Similarity:", cosine)
+
+#compute distance
+distance=(1-cosine)
+print("Distance:",distance)
+#The Cosine Similarity is 1 and the distance is 0 , we have similar vectors.
+
+#SUBJECT 6
+#6.a
+def jaccard(list1, list2):
+    intersection = len(list(set(list1).intersection(list2)))
+    union = (len(list1) + len(list2)) - intersection
+    return float(intersection) / union
+x =("Green", "Potato", "Ford") 
+y=("Tyrian purple", "Pasta", "Opel")
+
+xy = jaccard(x,y)
+nominalDistance= 1-xy
+print(x)
+print(y)
+print(xy)
+print("Nominal distance:" ,nominalDistance)
+##The Nominal distance is 1, that means the categorical vectors are dissimilar.
+
+#6.b
+def jaccard(list1, list2):
+    intersection = len(list(set(list1).intersection(list2)))
+    union = (len(list1) + len(list2)) - intersection
+    return float(intersection) / union
+x=("Eagle", "Ronaldo", "Real madrid", "Prussian blue", "Michael Bay")
+y=("Eagle", "Ronaldo", "Real madrid", "Prussian blue", "Michael Bay")
+xy = jaccard(x,y)
+nominalDistance= 1-xy
+print(x)
+print(y)
+print(xy)
+print("Nominal distance:" ,nominalDistance)
+##The Nominal distance is 0, that meansthe categorical vectors are simillar. 
+
+#6.c
+def jaccard(list1, list2):
+    intersection = len(list(set(list1).intersection(list2)))
+    union = (len(list1) + len(list2)) - intersection
+    return float(intersection) / union
+x =("Werner Herzog", "Aquirre, the wrath of God", "Audi",
+"Spanish red")
+y=("Martin Scorsese","Taxi driver" , "Toyota", "Spanish red")
+
+xy = jaccard(x,y)
+nominalDistance= 1-xy
+print(x)
+print(y)
+print(xy)
+print("Nominal distance:" ,nominalDistance)
+## The Nominal distance is 0.8571428571428572.
+
+
